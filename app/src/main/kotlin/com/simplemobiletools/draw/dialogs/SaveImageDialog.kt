@@ -20,7 +20,7 @@ import java.io.File
 import java.io.OutputStream
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 
 class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: String,
                       val curPath: String, var subject: String, var electrode: String,
@@ -143,7 +143,7 @@ class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: Stri
 
     private fun getFilename(): String {
         // Display date and time in human readable format:
-        val sdf = SimpleDateFormat("YYYY-MM-dd_HH-mm-ss")
+        val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
 
         // Add subject ID and electrode name to timestamp
         return "${subject}_${electrode}_${sdf.format(Date(System.currentTimeMillis()))}"
