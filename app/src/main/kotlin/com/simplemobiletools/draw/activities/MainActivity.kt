@@ -28,6 +28,7 @@ import com.simplemobiletools.draw.helpers.SVG
 import com.simplemobiletools.draw.interfaces.CanvasListener
 import com.simplemobiletools.draw.models.Svg
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_save_image.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -44,8 +45,9 @@ class MainActivity : SimpleActivity(), CanvasListener {
     private var suggestedFileExtension = PNG
     private var isEraserOn = false
     private var isImageCaptureIntent = false
-
     private var storedUseEnglish = false
+    private var strSubject = "00-000"
+    private var strElectrode = "A00"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -288,9 +290,13 @@ class MainActivity : SimpleActivity(), CanvasListener {
     }
 
     private fun saveImage() {
-        SaveImageDialog(this, suggestedFileExtension, curPath, my_canvas) { path, extension ->
+        SaveImageDialog(this, suggestedFileExtension, curPath, strSubject, strElectrode,
+                my_canvas) {
+            path, extension, subject, electrode ->
             curPath = path
             suggestedFileExtension = extension
+            strSubject = subject
+            strElectrode = electrode
         }
     }
 
