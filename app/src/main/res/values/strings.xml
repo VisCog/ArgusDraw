@@ -22,6 +22,8 @@
     </string>
 
     <!-- Our own strings -->
+    <string name="trial">Trial No.</string>
+    <string name="trial_cannot_be_empty">Trial No. cannot be empty</string>
     <string name="subject">Subject</string>
     <string name="subject_cannot_be_empty">Subject ID cannot be empty</string>
     <string name="electrode">Electrode</string>

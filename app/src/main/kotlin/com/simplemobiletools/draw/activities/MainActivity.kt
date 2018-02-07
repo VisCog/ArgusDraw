@@ -48,6 +48,7 @@ class MainActivity : SimpleActivity(), CanvasListener {
     private var storedUseEnglish = false
     private var strSubject = "00-000"
     private var strElectrode = "A00"
+    private var trialNo = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -291,12 +292,13 @@ class MainActivity : SimpleActivity(), CanvasListener {
 
     private fun saveImage() {
         SaveImageDialog(this, suggestedFileExtension, curPath, strSubject, strElectrode,
-                my_canvas) {
-            path, extension, subject, electrode ->
+                trialNo + 1, my_canvas) {
+            path, extension, subject, electrode, trial ->
             curPath = path
             suggestedFileExtension = extension
             strSubject = subject
             strElectrode = electrode
+            trialNo = trial
         }
     }
 

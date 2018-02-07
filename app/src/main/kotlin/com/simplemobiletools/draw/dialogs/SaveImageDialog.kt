@@ -24,14 +24,29 @@ import java.util.*
 
 class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: String,
                       val curPath: String, var subject: String, var electrode: String,
+                      var trial: Int,
                       val canvas: MyCanvas,
                       callback: (path: String, extension: String,
-                                 subject: String, electrode: String) -> Unit) {
+                                 subject: String, electrode: String, trial: Int) -> Unit) {
     private val SIMPLE_DRAW = "Simple Draw"
 
     init {
         var realPath = if (curPath.isEmpty()) "${activity.internalStoragePath}/$SIMPLE_DRAW" else File(curPath).parent.trimEnd('/')
         val view = activity.layoutInflater.inflate(R.layout.dialog_save_image, null).apply {
+            save_image_trial.setText(trial.toString())
+            save_image_trial.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(str: Editable) {
+                    if (str.isEmpty()) {
+                        activity.toast(R.string.trial_cannot_be_empty)
+                        return
+                    }
+                    trial = Integer.parseInt(str.toString())
+                    save_image_filename.setText(getFilename())
+                }
+                override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+            })
+
             save_image_subject.setText(subject)
             save_image_subject.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(str: Editable) {
@@ -102,7 +117,7 @@ class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: Stri
                     }
 
                     if (saveFile(newFile)) {
-                        callback(newFile.absolutePath, extension, subject, electrode)
+                        callback(newFile.absolutePath, extension, subject, electrode, trial)
                         dismiss()
                     } else {
                         activity.toast(R.string.unknown_error_occurred)
@@ -146,6 +161,6 @@ class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: Stri
         val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
 
         // Add subject ID and electrode name to timestamp
-        return "${subject}_${electrode}_${sdf.format(Date(System.currentTimeMillis()))}"
+        return "${trial}_${subject}_${electrode}_${sdf.format(Date(System.currentTimeMillis()))}"
     }
 }
