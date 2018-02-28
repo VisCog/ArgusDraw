@@ -69,6 +69,9 @@ class MainActivity : SimpleActivity(), CanvasListener {
         eraser.setOnClickListener { eraserClicked() }
         redo.setOnClickListener { my_canvas.redo() }
 
+        val imgInfo = "Trial No. " + trialNo.toString() + ", Subject: " + strSubject + ", Electrode: " + strElectrode
+        imgInfoBox.setText(imgInfo)
+
         checkIntents()
         checkWhatsNewDialog()
         storeStateVariables()
@@ -85,6 +88,10 @@ class MainActivity : SimpleActivity(), CanvasListener {
         stroke_width_bar.beVisibleIf(isStrokeWidthBarEnabled)
         my_canvas.setIsStrokeWidthBarEnabled(isStrokeWidthBarEnabled)
         updateTextColors(main_holder)
+
+        val imgInfo = "Trial No. " + trialNo.toString() + ", Subject: " + strSubject + ", Electrode: " + strElectrode
+        imgInfoBox.setText(imgInfo)
+
     }
 
     override fun onPause() {

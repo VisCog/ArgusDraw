@@ -14,6 +14,7 @@ import com.simplemobiletools.draw.helpers.PNG
 import com.simplemobiletools.draw.helpers.SVG
 import com.simplemobiletools.draw.models.Svg
 import com.simplemobiletools.draw.views.MyCanvas
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_save_image.*
 import kotlinx.android.synthetic.main.dialog_save_image.view.*
 import java.io.File
@@ -42,6 +43,8 @@ class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: Stri
                     }
                     trial = Integer.parseInt(str.toString())
                     save_image_filename.setText(getFilename())
+                    val imgInfo = "Trial No. " + trial.toString() + ", Subject: " + subject + ", Electrode: " + electrode
+                    activity.imgInfoBox.setText(imgInfo)
                 }
                 override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
@@ -56,6 +59,8 @@ class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: Stri
                     }
                     subject = str.toString()
                     save_image_filename.setText(getFilename())
+                    val imgInfo = "Trial No. " + trial.toString() + ", Subject: " + subject + ", Electrode: " + electrode
+                    activity.imgInfoBox.setText(imgInfo)
                 }
                 override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
@@ -70,6 +75,8 @@ class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: Stri
                     }
                     electrode = str.toString()
                     save_image_filename.setText(getFilename())
+                    val imgInfo = "Trial No. " + trial.toString() + ", Subject: " + subject + ", Electrode: " + electrode
+                    activity.imgInfoBox.setText(imgInfo)
                 }
                 override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
