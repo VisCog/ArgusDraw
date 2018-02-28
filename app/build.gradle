@@ -7,12 +7,12 @@ android {
     buildToolsVersion "27.0.3"
 
     defaultConfig {
-        applicationId "com.simplemobiletools.draw"
+        applicationId "com.simplemobiletools.ArgusDraw"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 28
         versionName "3.1.1"
-        setProperty("archivesBaseName", "draw")
+        setProperty("archivesBaseName", "ArgusDraw")
     }
 
     signingConfigs {
