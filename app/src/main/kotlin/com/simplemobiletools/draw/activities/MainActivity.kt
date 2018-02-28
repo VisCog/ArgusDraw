@@ -111,7 +111,6 @@ class MainActivity : SimpleActivity(), CanvasListener {
         menu.apply {
             findItem(R.id.menu_confirm).isVisible = isImageCaptureIntent
             findItem(R.id.menu_save).isVisible = !isImageCaptureIntent
-            findItem(R.id.menu_share).isVisible = !isImageCaptureIntent
         }
 
         return true
@@ -121,7 +120,6 @@ class MainActivity : SimpleActivity(), CanvasListener {
         when (item.itemId) {
             R.id.menu_confirm -> confirmImage()
             R.id.menu_save -> trySaveImage()
-            R.id.menu_share -> shareImage()
             R.id.clear -> clearCanvas()
             R.id.open_file -> tryOpenFile()
             R.id.change_background -> changeBackgroundClicked()
@@ -306,15 +304,6 @@ class MainActivity : SimpleActivity(), CanvasListener {
             strSubject = subject
             strElectrode = electrode
             trialNo = trial
-        }
-    }
-
-    private fun shareImage() {
-        val uri = getImageUri(my_canvas.getBitmap())
-        if (uri != null) {
-            shareUri(uri, BuildConfig.APPLICATION_ID)
-        } else {
-            toast(R.string.unknown_error_occurred)
         }
     }
 
