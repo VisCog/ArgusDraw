@@ -21,6 +21,14 @@
         This app is just one piece of a bigger series of apps. You can find the rest of them at http://www.simplemobiletools.com
     </string>
 
+    <!-- Our own strings -->
+    <string name="trial">Trial No.</string>
+    <string name="trial_cannot_be_empty">Trial No. cannot be empty</string>
+    <string name="subject">Subject</string>
+    <string name="subject_cannot_be_empty">Subject ID cannot be empty</string>
+    <string name="electrode">Electrode</string>
+    <string name="electrode_cannot_be_empty">Electrode cannot be empty</string>
+
     <!--
         Haven't found some strings? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res

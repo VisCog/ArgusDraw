@@ -1,29 +1,88 @@
 package com.simplemobiletools.draw.dialogs
 
 import android.support.v7.app.AlertDialog
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.WindowManager
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.draw.R
+import com.simplemobiletools.draw.R.string.subject
 import com.simplemobiletools.draw.activities.SimpleActivity
 import com.simplemobiletools.draw.helpers.JPG
 import com.simplemobiletools.draw.helpers.PNG
 import com.simplemobiletools.draw.helpers.SVG
 import com.simplemobiletools.draw.models.Svg
 import com.simplemobiletools.draw.views.MyCanvas
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_save_image.*
 import kotlinx.android.synthetic.main.dialog_save_image.view.*
 import java.io.File
 import java.io.OutputStream
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
-class SaveImageDialog(val activity: SimpleActivity, val suggestedExtension: String, val curPath: String, val canvas: MyCanvas,
-                      callback: (path: String, extension: String) -> Unit) {
+class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: String,
+                      val curPath: String, var subject: String, var electrode: String,
+                      var trial: Int,
+                      val canvas: MyCanvas,
+                      callback: (path: String, extension: String,
+                                 subject: String, electrode: String, trial: Int) -> Unit) {
     private val SIMPLE_DRAW = "Simple Draw"
 
     init {
-        val initialFilename = getInitialFilename()
         var realPath = if (curPath.isEmpty()) "${activity.internalStoragePath}/$SIMPLE_DRAW" else File(curPath).parent.trimEnd('/')
         val view = activity.layoutInflater.inflate(R.layout.dialog_save_image, null).apply {
-            save_image_filename.setText(initialFilename)
+            save_image_trial.setText(trial.toString())
+            save_image_trial.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(str: Editable) {
+                    if (str.isEmpty()) {
+                        activity.toast(R.string.trial_cannot_be_empty)
+                        return
+                    }
+                    trial = Integer.parseInt(str.toString())
+                    save_image_filename.setText(getFilename())
+                    val imgInfo = "Trial No. " + trial.toString() + ", Subject: " + subject + ", Electrode: " + electrode
+                    activity.imgInfoBox.setText(imgInfo)
+                }
+                override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+            })
+
+            save_image_subject.setText(subject)
+            save_image_subject.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(str: Editable) {
+                    if (str.isEmpty()) {
+                        activity.toast(R.string.subject_cannot_be_empty)
+                        return
+                    }
+                    subject = str.toString()
+                    save_image_filename.setText(getFilename())
+                    val imgInfo = "Trial No. " + trial.toString() + ", Subject: " + subject + ", Electrode: " + electrode
+                    activity.imgInfoBox.setText(imgInfo)
+                }
+                override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+            })
+
+            save_image_electrode.setText(electrode)
+            save_image_electrode.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(str: Editable) {
+                    if (str.isEmpty()) {
+                        activity.toast(R.string.electrode_cannot_be_empty)
+                        return
+                    }
+                    electrode = str.toString()
+                    save_image_filename.setText(getFilename())
+                    val imgInfo = "Trial No. " + trial.toString() + ", Subject: " + subject + ", Electrode: " + electrode
+                    activity.imgInfoBox.setText(imgInfo)
+                }
+                override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+            })
+
+            save_image_filename.setText(getFilename())
             save_image_radio_group.check(when (suggestedExtension) {
                 JPG -> R.id.save_image_radio_jpg
                 SVG -> R.id.save_image_radio_svg
@@ -65,7 +124,7 @@ class SaveImageDialog(val activity: SimpleActivity, val suggestedExtension: Stri
                     }
 
                     if (saveFile(newFile)) {
-                        callback(newFile.absolutePath, extension)
+                        callback(newFile.absolutePath, extension, subject, electrode, trial)
                         dismiss()
                     } else {
                         activity.toast(R.string.unknown_error_occurred)
@@ -91,9 +150,10 @@ class SaveImageDialog(val activity: SimpleActivity, val suggestedExtension: Stri
     }
 
     private fun saveImageFile(file: File) {
+        val msg = file.toString() + " saved successfully.";
         activity.getFileOutputStream(file) {
             writeToOutputStream(file, it!!)
-            activity.toast(R.string.file_saved)
+            activity.toast(msg)
         }
     }
 
@@ -103,8 +163,11 @@ class SaveImageDialog(val activity: SimpleActivity, val suggestedExtension: Stri
         }
     }
 
-    private fun getInitialFilename(): String {
-        val defaultFilename = "image_${System.currentTimeMillis() / 1000}"
-        return if (curPath.isEmpty()) defaultFilename else curPath.getFilenameFromPath().substring(0, curPath.getFilenameFromPath().lastIndexOf("."))
+    private fun getFilename(): String {
+        // Display date and time in human readable format:
+        val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
+
+        // Add subject ID and electrode name to timestamp
+        return "${trial}_${subject}_${electrode}_${sdf.format(Date(System.currentTimeMillis()))}"
     }
 }

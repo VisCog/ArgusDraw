@@ -28,6 +28,7 @@ import com.simplemobiletools.draw.helpers.SVG
 import com.simplemobiletools.draw.interfaces.CanvasListener
 import com.simplemobiletools.draw.models.Svg
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_save_image.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -44,8 +45,10 @@ class MainActivity : SimpleActivity(), CanvasListener {
     private var suggestedFileExtension = PNG
     private var isEraserOn = false
     private var isImageCaptureIntent = false
-
     private var storedUseEnglish = false
+    private var strSubject = "00-000"
+    private var strElectrode = "A00"
+    private var trialNo = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +69,9 @@ class MainActivity : SimpleActivity(), CanvasListener {
         eraser.setOnClickListener { eraserClicked() }
         redo.setOnClickListener { my_canvas.redo() }
 
+        val imgInfo = "Trial No. " + trialNo.toString() + ", Subject: " + strSubject + ", Electrode: " + strElectrode
+        imgInfoBox.setText(imgInfo)
+
         checkIntents()
         checkWhatsNewDialog()
         storeStateVariables()
@@ -82,6 +88,10 @@ class MainActivity : SimpleActivity(), CanvasListener {
         stroke_width_bar.beVisibleIf(isStrokeWidthBarEnabled)
         my_canvas.setIsStrokeWidthBarEnabled(isStrokeWidthBarEnabled)
         updateTextColors(main_holder)
+
+        val imgInfo = "Trial No. " + trialNo.toString() + ", Subject: " + strSubject + ", Electrode: " + strElectrode
+        imgInfoBox.setText(imgInfo)
+
     }
 
     override fun onPause() {
@@ -288,9 +298,14 @@ class MainActivity : SimpleActivity(), CanvasListener {
     }
 
     private fun saveImage() {
-        SaveImageDialog(this, suggestedFileExtension, curPath, my_canvas) { path, extension ->
+        SaveImageDialog(this, suggestedFileExtension, curPath, strSubject, strElectrode,
+                trialNo + 1, my_canvas) {
+            path, extension, subject, electrode, trial ->
             curPath = path
             suggestedFileExtension = extension
+            strSubject = subject
+            strElectrode = electrode
+            trialNo = trial
         }
     }
 
