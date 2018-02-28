@@ -34,6 +34,10 @@ class SaveImageDialog(var activity: SimpleActivity, val suggestedExtension: Stri
     init {
         var realPath = if (curPath.isEmpty()) "${activity.internalStoragePath}/$SIMPLE_DRAW" else File(curPath).parent.trimEnd('/')
         val view = activity.layoutInflater.inflate(R.layout.dialog_save_image, null).apply {
+            // Update image info box whenever there's an update to trial no / subject / electrode
+            val imgInfo = "Trial No. " + trial.toString() + ", Subject: " + subject + ", Electrode: " + electrode
+            activity.imgInfoBox.setText(imgInfo)
+
             save_image_trial.setText(trial.toString())
             save_image_trial.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(str: Editable) {
